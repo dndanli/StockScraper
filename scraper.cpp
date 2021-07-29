@@ -111,27 +111,3 @@ void Scraper::saveDataToFile(std::string formattedDataSource)
     }
 }
 
-//possible solutions
-/**
- * Best solution
- * 
- * 1. Check if there is DOM support for C++ or a simpler way to do it with a QT library
- * 
- * IF YES then javascript script with data can be fetched
- * json data tree can be fetched and converted into usable variables. 
- * 
-*/
-
-/**
- * Time-Consuming solution
- * 
- * 2. Check libtidy to convert html into xml
- *    Check libxml to parse/navigate html.
-*/
-
-/**
- * Current solution
- * 
- * 3. Brute-force data fetched from html, format data and use it for the application.
- * 
-*/
