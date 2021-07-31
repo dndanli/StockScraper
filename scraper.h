@@ -7,5 +7,4 @@ public:
     Scraper(std::string tickerName);
     std::string fetchHtml(std::string url);
     void formatData(std::string &dataSource);
-    void saveDataToFile(std::string formattedDataSource);
 };

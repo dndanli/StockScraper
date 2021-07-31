@@ -95,19 +95,3 @@ void Scraper::formatData(std::string &dataSource)
 
     dataSource = dataSource.substr((startPos + 16), charsToFetch);
 }
-
-void Scraper::saveDataToFile(std::string formattedDataSource)
-{
-    //declare where to save data
-    std::fstream yahooData;
-
-    //declare mode : writing
-    yahooData.open("yahoo_data.json", std::ios::out);
-
-    if (yahooData.is_open())
-    {
-        yahooData << formattedDataSource;
-        yahooData.close();
-    }
-}
-

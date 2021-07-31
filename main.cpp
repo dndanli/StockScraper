@@ -1,25 +1,36 @@
 #include <iostream>
-#include <jsoncpp/json/json.h>
-#include "scraper.h"
 #include <vector>
+#include <fstream>
+#include "scraper.h"
+#include <jsoncpp/json/json.h>
 
-struct MetaData
-{
-  Json::Value price;
-  Json::Value companyName;
-  Json::Value marketCap;
-};
+std::vector<Json::Value> stockPrice;
+std::vector<Json::Value> companyName;
+std::vector<Json::Value> marketCap;
+std::vector<Json::Value> trailingPE;
+std::vector<Json::Value> enterpriseValue;
+std::vector<Json::Value> totalDebt;
+std::vector<Json::Value> totalCash;
+std::vector<Json::Value> forwardPE;
+std::vector<Json::Value> beta;
 
-struct EnterpriseValPerShare
+void saveDataToFile(std::vector<Json::Value> formattedDataSource)
 {
-  Json::Value enterpriseValue;
-  Json::Value totalDebt;
-  Json::Value totalCash;
-};
+  std::fstream csvFile;
+  csvFile.open("stockData.csv", std::ios::app);
+  if (csvFile.is_open())
+  {
+    for (size_t i = 0; i < formattedDataSource.size(); i++)
+    {
+      csvFile << formattedDataSource[i] << ", ";
+    }
+    csvFile << std::endl;
+    csvFile.close();
+  }
+}
 
 int main()
 {
-
   Json::CharReaderBuilder builder;
   Json::CharReader *reader = builder.newCharReader();
   Json::Value jsonData;
@@ -44,7 +55,6 @@ int main()
   }
 
   std::cout << std::endl;
-
   for (int i = 0; i < stockVec.size(); i++)
   {
 
@@ -52,7 +62,6 @@ int main()
     std::string data = s.fetchHtml(s.url);
     s.formatData(data);
 
-    //s.saveDataToFile(data);
     bool isParsingSuccessful = reader->parse(data.c_str(), data.c_str() + data.size(), &jsonData, &error);
 
     if (!isParsingSuccessful)
@@ -61,31 +70,53 @@ int main()
       std::cout << error << std::endl;
     }
 
-    MetaData metaData;
-    metaData.marketCap = jsonData["context"]["dispatcher"]["stores"]["StreamDataStore"]["quoteData"][stockVec[i]]["marketCap"]["fmt"];
-    metaData.price = jsonData["context"]["dispatcher"]["stores"]["QuoteSummaryStore"]["price"]["regularMarketPrice"]["fmt"];
-    metaData.companyName = jsonData["context"]["dispatcher"]["stores"]["StreamDataStore"]["quoteData"][stockVec[i]]["longName"];
+    stockPrice.push_back((jsonData["context"]["dispatcher"]["stores"]["QuoteSummaryStore"]["price"]["regularMarketPrice"]["fmt"]));
+    companyName.push_back(jsonData["context"]["dispatcher"]["stores"]["StreamDataStore"]["quoteData"][stockVec[i]]["longName"]);
+    marketCap.push_back(jsonData["context"]["dispatcher"]["stores"]["StreamDataStore"]["quoteData"][stockVec[i]]["marketCap"]["fmt"]);
+    trailingPE.push_back(jsonData["context"]["dispatcher"]["stores"]["QuoteSummaryStore"]["summaryDetail"]["trailingPE"]["fmt"]);
 
-    EnterpriseValPerShare eValPerShare;
-    eValPerShare.enterpriseValue = jsonData["context"]["dispatcher"]["stores"]["QuoteSummaryStore"]["defaultKeyStatistics"]["enterpriseValue"]["fmt"];
-    eValPerShare.totalCash = jsonData["context"]["dispatcher"]["stores"]["QuoteSummaryStore"]["financialData"]["totalCash"]["fmt"];
-    eValPerShare.totalDebt = jsonData["context"]["dispatcher"]["stores"]["QuoteSummaryStore"]["financialData"]["totalDebt"]["fmt"];
+    enterpriseValue.push_back(jsonData["context"]["dispatcher"]["stores"]["QuoteSummaryStore"]["defaultKeyStatistics"]["enterpriseValue"]["fmt"]);
+    totalCash.push_back(jsonData["context"]["dispatcher"]["stores"]["QuoteSummaryStore"]["financialData"]["totalCash"]["fmt"]);
+    totalDebt.push_back(jsonData["context"]["dispatcher"]["stores"]["QuoteSummaryStore"]["financialData"]["totalDebt"]["fmt"]);
+
+    forwardPE.push_back(jsonData["context"]["dispatcher"]["stores"]["QuoteSummaryStore"]["defaultKeyStatistics"]["forwardPE"]["fmt"]);
+    beta.push_back(jsonData["context"]["dispatcher"]["stores"]["QuoteSummaryStore"]["defaultKeyStatistics"]["beta"]["fmt"]);
 
     std::cout << "+----------------------------------------------+" << std::endl;
     std::cout << "Company Metadata" << std::endl;
-    std::cout << "Company: " << metaData.companyName << std::endl;
-    std::cout << "Stock price: $" << metaData.price << std::endl;
-    std::cout << "Market Cap: $" << metaData.marketCap << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Company: " << companyName[i] << std::endl;
+    std::cout << "Stock price: $" << stockPrice[i] << std::endl;
+    std::cout << "Market Cap: $" << marketCap[i] << std::endl;
+    std::cout << "Trailing PE: " << trailingPE[i] << std::endl;
     std::cout << std::endl;
 
     std::cout << "Enterprise Value Per share" << std::endl;
-    std::cout << "Enterprise Value: " << eValPerShare.enterpriseValue << std::endl;
-    std::cout << "Total Cash: $" << eValPerShare.totalCash << std::endl;
-    std::cout << "Total Debr: $" << eValPerShare.totalDebt << std::endl;
-    std::cout << "+----------------------------------------------+" << std::endl;
-
     std::cout << std::endl;
+
+    std::cout << "Enterprise Value: " << enterpriseValue[i] << std::endl;
+    std::cout << "Total Cash: $" << totalCash[i] << std::endl;
+    std::cout << "Total Debt: $" << totalDebt[i] << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Assumptions Metadata" << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Beta: " << beta[i] << std::endl;
+    std::cout << "Forward P/E: " << forwardPE[i] << std::endl;
+    std::cout << "+----------------------------------------------+" << std::endl;
   }
+
+  saveDataToFile(companyName);
+  saveDataToFile(stockPrice);
+  saveDataToFile(marketCap);
+  saveDataToFile(trailingPE);
+  saveDataToFile(enterpriseValue);
+  saveDataToFile(totalCash);
+  saveDataToFile(totalDebt);
+  saveDataToFile(beta);
+  saveDataToFile(forwardPE);
 
   return 0;
 }
