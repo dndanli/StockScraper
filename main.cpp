@@ -1,8 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <fstream>
 #include <algorithm>
-#include <jsoncpp/json/json.h>
+#include "utilityFunctions.h"
 #include "scraper.h"
 
 //each vector stores a piece of information of a stock
@@ -15,22 +14,6 @@ std::vector<Json::Value> totalDebt;
 std::vector<Json::Value> totalCash;
 std::vector<Json::Value> forwardPE;
 std::vector<Json::Value> beta;
-
-//allows user to save stock information to a csv file
-void saveDataToFile(std::vector<Json::Value> formattedDataSource)
-{
-  std::fstream csvFile;
-  csvFile.open("stockData.csv", std::ios::app);
-  if (csvFile.is_open())
-  {
-    for (size_t i = 0; i < formattedDataSource.size(); i++)
-    {
-      csvFile << formattedDataSource[i] << ", ";
-    }
-    csvFile << std::endl;
-    csvFile.close();
-  }
-}
 
 int main()
 {
