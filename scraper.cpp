@@ -7,7 +7,7 @@
 
 Scraper::Scraper(std::string ticker) : url("https://finance.yahoo.com/quote/" + ticker + "/key-statistics?p=" + ticker) {}
 
-// This code was partially made by consulting the libcurl docs
+// This function was partially made by consulting the libcurl docs
 // and pages on stack overflow
 
 // By user Thanatos
