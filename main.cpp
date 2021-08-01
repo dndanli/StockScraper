@@ -140,14 +140,16 @@ int main()
               [](std::string const &val)
               { return stod(val); });
 
-    //finally, sort
-    std::sort(tickerPrices.begin(), tickerPrices.end(), std::less<>());
+    // // //finally, sort
+    // std::sort(tickerPrices.begin(), tickerPrices.end(), std::less<>());
 
-    //displaying
-    for (auto price : tickerPrices)
-    {
-      std::cout << price << std::endl;
-    }
+    // //displaying
+    // for (auto price : tickerPrices)
+    // {
+    //   std::cout << price << std::endl;
+    // }
+
+    printLowestPrices(stockTickers, tickerPrices);
   }
   std::cout << "Goodbye!" << std::endl;
 
