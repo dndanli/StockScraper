@@ -64,6 +64,7 @@ int main()
   for (count = 0; count < tickerCount; count++)
   {
     std::cin >> ticker;
+    convertToUpper(ticker);
     stockTickers.push_back(ticker);
   }
 
