@@ -42,3 +42,11 @@ void printLowestPrices(std::vector<std::string> tickerName, std::vector<double> 
         std::cout << pairInfo[i].first << ": " << pairInfo[i].second << std::endl;
     }
 }
+
+void convertToUpper(std::string &tickerName)
+{
+    for (int i = 0; i < tickerName.size(); i++)
+    {
+        tickerName[i] = std::toupper(tickerName[i]);
+    }
+}
