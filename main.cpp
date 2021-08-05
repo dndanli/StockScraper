@@ -140,15 +140,15 @@ int main()
   }
 
   // saving data to csv file (optional)
-  saveDataToFile(companyName);
-  saveDataToFile(stockPrice);
-  saveDataToFile(marketCap);
-  saveDataToFile(trailingPE);
-  saveDataToFile(enterpriseValue);
-  saveDataToFile(totalCash);
-  saveDataToFile(totalDebt);
-  saveDataToFile(beta);
-  saveDataToFile(forwardPE);
+  saveDataToFile(companyName, "Company Name");
+  saveDataToFile(stockPrice, "Stock Price");
+  saveDataToFile(marketCap, "Market Cap");
+  saveDataToFile(trailingPE, "P/E");
+  saveDataToFile(enterpriseValue, "Enterprise Value");
+  saveDataToFile(totalCash, "Total Cash");
+  saveDataToFile(totalDebt, "Total Debt");
+  saveDataToFile(beta, "Beta");
+  saveDataToFile(forwardPE, "Forward P/E");
 
   std::cout << "Would you like to see stocks with the lowest prices?(y/n)" << std::endl;
   std::cin >> userChoice;
