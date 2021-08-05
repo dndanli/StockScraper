@@ -85,9 +85,13 @@ int main()
     //parsing to  valid json
     bool isParsingSuccessful = reader->parse(htmlData.c_str(), htmlData.c_str() + htmlData.size(), &jsonData, &error);
 
+    //checking if ticker name is valid
     if (!isParsingSuccessful)
     {
-      std::cout << error << std::endl;
+      // to display error from jsoncpp
+      // std::cout << error << std::endl;
+      std::cout << stockTickers[i] << " Is not a valid ticker" << std::endl;
+      goto end;
     }
 
     //querying data from json
