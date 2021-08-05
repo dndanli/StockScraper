@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <limits>
+#include <string>
+#include <sstream>
 #include "utilityFunctions.h"
 #include "scraper.h"
 
@@ -29,13 +32,32 @@ int main()
   //stores ticker prices as strings, used to remove commas from json value before converting to a double.
   std::vector<std::string> strTickerPrices;
 
-  std::string ticker;
+  std::string ticker, line;
   int tickerCount;
   int count;
 
   //prompting user
-  std::cout << "How any tickers would you like to fetch?" << std::endl;
+  std::cout << "How many tickers would you like to fetch?" << std::endl;
   std::cin >> tickerCount;
+
+  if (tickerCount < 1)
+  {
+    std::cout << "Invalid number, specify more than " << tickerCount << " ticker(s)" << std::endl;
+    goto finish;
+  }
+
+  while (std::getline(std::cin, line))
+  {
+    std::stringstream ss(line);
+    if (ss >> tickerCount)
+    {
+      if (ss.eof())
+      {
+        break;
+      }
+    }
+    std::cout << "Please enter again: " << std::endl;
+  }
 
   std::cout << "Enter a ticker" << std::endl;
 
@@ -43,6 +65,7 @@ int main()
   for (count = 0; count < tickerCount; count++)
   {
     std::cin >> ticker;
+
     stockTickers.push_back(ticker);
   }
 
@@ -140,9 +163,10 @@ int main()
               [](std::string const &val)
               { return stod(val); });
 
-
     printLowestPrices(stockTickers, tickerPrices);
   }
+
+finish:
   std::cout << "Goodbye!" << std::endl;
 
   return 0;
