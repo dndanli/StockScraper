@@ -38,13 +38,6 @@ int main()
 
   //prompting user
   std::cout << "How many tickers would you like to fetch?" << std::endl;
-  std::cin >> tickerCount;
-
-  if (tickerCount < 1)
-  {
-    std::cout << "Invalid number, specify more than " << tickerCount << " ticker(s)" << std::endl;
-    goto finish;
-  }
 
   while (std::getline(std::cin, line))
   {
@@ -59,13 +52,18 @@ int main()
     std::cout << "Please enter again: " << std::endl;
   }
 
+  if (tickerCount < 1)
+  {
+    std::cout << "Invalid number, specify more than " << tickerCount << " ticker(s)" << std::endl;
+    goto end;
+  }
+
   std::cout << "Enter a ticker" << std::endl;
 
   //prompting for ticker names
   for (count = 0; count < tickerCount; count++)
   {
     std::cin >> ticker;
-
     stockTickers.push_back(ticker);
   }
 
@@ -76,9 +74,12 @@ int main()
   {
     //initializing scraper instance for current ticker
     Scraper s(stockTickers[i]);
+    std::string htmlData;
+
+    htmlData = s.fetchHtml(s.url);
+    std::cout << "Not a valid ticker" << std::endl;
 
     //fetching html
-    std::string htmlData = s.fetchHtml(s.url);
 
     //format to json
     s.formatData(htmlData);
@@ -166,8 +167,8 @@ int main()
     printLowestPrices(stockTickers, tickerPrices);
   }
 
-finish:
   std::cout << "Goodbye!" << std::endl;
+end:
 
   return 0;
 }
