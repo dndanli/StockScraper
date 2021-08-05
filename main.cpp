@@ -76,10 +76,8 @@ int main()
     Scraper s(stockTickers[i]);
     std::string htmlData;
 
-    htmlData = s.fetchHtml(s.url);
-    std::cout << "Not a valid ticker" << std::endl;
-
     //fetching html
+    htmlData = s.fetchHtml(s.url);
 
     //format to json
     s.formatData(htmlData);
